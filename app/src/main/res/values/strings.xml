@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TicTacToy</string>
+    <string name="field_name">TicTacToy</string>
+    <string name="marked">Field has already marked</string>
+</resources>
