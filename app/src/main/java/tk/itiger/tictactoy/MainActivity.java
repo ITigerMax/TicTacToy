@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     private final String ZERO_COMBINATION = "ZERO_COMBINATION";
     private final String IS_JUST_STARTED = "IS_JUST_STARTED";
 
+    private static int counter;
+
     private final int[] BUTTONS_ID = {
             R.id.top_left_btn, R.id.top_center_btn, R.id.top_right_btn,
             R.id.center_left_btn, R.id.center_center_btn, R.id.center_right_btn,
@@ -26,6 +29,11 @@ public class MainActivity extends AppCompatActivity {
 
     private Map<Integer, Button> BUTTONS = new HashMap<>();
     private TicTacLogic LOGIC;
+    private WinChecker winChecker;
+    private TextView gameStatus;
+    private String finishingMessage;
+    private boolean isFinished;
+
 
 
     @Override
@@ -44,12 +52,22 @@ public class MainActivity extends AppCompatActivity {
         savedInstanceState.putIntegerArrayList(X_CELLS_MARKED, (ArrayList<Integer>) LOGIC.getXButton());
         savedInstanceState.putIntegerArrayList(ZERO_CELLS_MARKED, (ArrayList<Integer>) LOGIC.getZeroButton());
         savedInstanceState.putBoolean(IS_JUST_STARTED, LOGIC.isJustStarted());
+        savedInstanceState.putInt("counter", counter);
+        savedInstanceState.putString("msg", finishingMessage);
+        savedInstanceState.putBoolean("isFinished", isFinished);
     }
 
     public void doGame(View view) {
+
         LOGIC.userGo(view);
         if (LOGIC.isValidPlayerStep()){
             LOGIC.aiGo();
+            if (winChecker.checkWinner()) {
+               finish("YOU ARE LOSER!");
+            }
+        }
+        if (counter++ >= 4) {
+            finish("NOT BAD, NOT BAD");
         }
     }
 
@@ -68,11 +86,20 @@ public class MainActivity extends AppCompatActivity {
             LOGIC.setZeroButton(zm);
             LOGIC.setJustStarted(state.getBoolean(IS_JUST_STARTED));
             LOGIC.reloadView();
+            counter = state.getInt("counter");
+            finishingMessage = state.getString("msg");
+            isFinished = state.getBoolean("isFinished");
+            if (isFinished){
+                finish(finishingMessage);
+
+            }
 
         }
     }
 
     private void initGame() {
+        isFinished = false;
+        gameStatus = findViewById(R.id.game_status);
         LOGIC = new TicTacLogic(BUTTONS);
     }
 
@@ -80,9 +107,26 @@ public class MainActivity extends AppCompatActivity {
         for (int index = 0; index < BUTTONS_ID.length; index++) {
             BUTTONS.put(index, (Button) findViewById(BUTTONS_ID[index]));
         }
+        winChecker = new WinChecker(BUTTONS_ID, new ArrayList<>(BUTTONS.values()));
     }
 
-
+    private void finish(String msg) {
+        counter = 0;
+        isFinished = true;
+        finishingMessage = msg;
+        gameStatus.setText(msg);
+        for (Button b : BUTTONS.values()) {
+            b.setEnabled(false);
+        }
+        gameStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initButtonList();
+                initGame();
+                recreate();
+            }
+        });
+    }
 
 
 }

@@ -21,8 +21,8 @@ import java.util.Set;
 class TicTacLogic {
 
 
-    private static final String X = "X";
-    private static final String ZERO = "0";
+    public static final String X = "X";
+    public static final String ZERO = "0";
     private Map<Integer, Button> CELLS;
     private Map<String, Integer> directions = new HashMap<>();
     private Map<String, Integer> aiStep = new HashMap<>();
@@ -167,7 +167,6 @@ class TicTacLogic {
                         continue;
                     }else {
                         b.setText(ZERO);
-                        System.out.println(b.isClickable());
                         zeroButton.add(b.getId());
                         deadHeat = false;
                         break;
