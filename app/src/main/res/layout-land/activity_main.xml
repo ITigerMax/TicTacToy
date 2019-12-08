@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:gravity="top|center"
+    android:orientation="vertical"
+    android:background="@color/black">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -15,7 +16,9 @@
             android:id="@+id/game_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
             android:text="@string/field_name"
+            android:layout_gravity="center_horizontal|center_vertical"
             android:textSize="24sp" />
 
     </LinearLayout>
@@ -27,22 +30,28 @@
 
         <Button
             android:id="@+id/top_left_btn"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@color/colorAccent"
+            android:layout_margin="2dp"
             android:onClick="doGame"
             android:textSize="50sp" />
 
         <Button
             android:id="@+id/top_center_btn"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@color/colorAccent"
+            android:layout_margin="2dp"
             android:onClick="doGame"
             android:textSize="50sp" />
 
         <Button
             android:id="@+id/top_right_btn"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@color/colorAccent"
+            android:layout_margin="2dp"
             android:onClick="doGame"
             android:textSize="50sp" />
     </LinearLayout>
@@ -54,22 +63,28 @@
 
         <Button
             android:id="@+id/center_left_btn"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@color/colorAccent"
+            android:layout_margin="2dp"
             android:onClick="doGame"
             android:textSize="50sp" />
 
         <Button
             android:id="@+id/center_center_btn"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@color/colorAccent"
+            android:layout_margin="2dp"
             android:onClick="doGame"
             android:textSize="50sp" />
 
         <Button
             android:id="@+id/center_right_btn"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@color/colorAccent"
+            android:layout_margin="2dp"
             android:onClick="doGame"
             android:textSize="50sp" />
 
@@ -82,25 +97,42 @@
 
         <Button
             android:id="@+id/bottom_left_btn"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@color/colorAccent"
+            android:layout_margin="2dp"
             android:onClick="doGame"
             android:textSize="50sp" />
 
         <Button
             android:id="@+id/bottom_center_btn"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@color/colorAccent"
+            android:layout_margin="2dp"
             android:onClick="doGame"
             android:textSize="50sp" />
 
         <Button
             android:id="@+id/bottom_right_btn"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@color/colorAccent"
+            android:layout_margin="2dp"
             android:onClick="doGame"
             android:textSize="50sp" />
 
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Created by Max Vasilenko"
+                android:textSize="11sp"
+                android:textColor="@color/colorPrimary"/>
     </LinearLayout>
 
 </LinearLayout>

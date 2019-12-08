@@ -1,6 +1,8 @@
 package tk.itiger.tictactoy;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -34,27 +36,31 @@ public class MainActivity extends AppCompatActivity {
     private String finishingMessage;
     private boolean isFinished;
 
+    MediaPlayer player;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         initButtonList();
         loadGame(savedInstanceState);
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState){
-        super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putStringArrayList(X_COMBINATION, LOGIC.getX());
-        savedInstanceState.putStringArrayList(ZERO_COMBINATION, LOGIC.getZero());
-        savedInstanceState.putIntegerArrayList(X_CELLS_MARKED, (ArrayList<Integer>) LOGIC.getXButton());
-        savedInstanceState.putIntegerArrayList(ZERO_CELLS_MARKED, (ArrayList<Integer>) LOGIC.getZeroButton());
-        savedInstanceState.putBoolean(IS_JUST_STARTED, LOGIC.isJustStarted());
-        savedInstanceState.putInt("counter", counter);
-        savedInstanceState.putString("msg", finishingMessage);
-        savedInstanceState.putBoolean("isFinished", isFinished);
+    protected void onSaveInstanceState(Bundle state){
+        super.onSaveInstanceState(state);
+        state.putStringArrayList(X_COMBINATION, LOGIC.getX());
+        state.putStringArrayList(ZERO_COMBINATION, LOGIC.getZero());
+        state.putIntegerArrayList(X_CELLS_MARKED, (ArrayList<Integer>) LOGIC.getXButton());
+        state.putIntegerArrayList(ZERO_CELLS_MARKED, (ArrayList<Integer>) LOGIC.getZeroButton());
+        state.putBoolean(IS_JUST_STARTED, LOGIC.isJustStarted());
+        state.putInt("counter", counter);
+        state.putString("msg", finishingMessage);
+        state.putBoolean("isFinished", isFinished);
     }
 
     public void doGame(View view) {
@@ -91,13 +97,15 @@ public class MainActivity extends AppCompatActivity {
             isFinished = state.getBoolean("isFinished");
             if (isFinished){
                 finish(finishingMessage);
-
             }
 
         }
     }
 
     private void initGame() {
+        player = MediaPlayer.create(this, R.raw.ost);
+        player.setLooping(true);
+        player.start();
         isFinished = false;
         gameStatus = findViewById(R.id.game_status);
         LOGIC = new TicTacLogic(BUTTONS);
@@ -128,5 +136,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        player.start();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        player.pause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        player.pause();
+    }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TicTacToy</string>
-    <string name="field_name">TicTacToy</string>
+    <string name="app_name">Крестики - Нолики</string>
+    <string name="field_name">Ты готов побеждать?</string>
     <string name="marked">Field has already marked</string>
 </resources>
