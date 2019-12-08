@@ -23,11 +23,13 @@ class TicTacLogic {
 
     private static final String X = "X";
     private static final String ZERO = "0";
-    private final Map<Integer, Button> CELLS;
-    private final Map<String, Integer> directions = new HashMap<>();
-    private final Map<String, Integer> aiStep = new HashMap<>();
+    private Map<Integer, Button> CELLS;
+    private Map<String, Integer> directions = new HashMap<>();
+    private Map<String, Integer> aiStep = new HashMap<>();
     private Set<String> zero = new HashSet<>();
     private Set<String> x = new HashSet<>();
+    private List<Integer> xButton = new ArrayList<>();
+    private List<Integer> zeroButton = new ArrayList<>();
     {   //1
         directions.put("12", 0);
         directions.put("36", 0);
@@ -106,6 +108,7 @@ class TicTacLogic {
 
      void userGo(View view) {
         Button button = (Button) view;
+        xButton.add(button.getId());
         if (justStarted){
             lookUpForFirstPlayerStep(button);
         }
@@ -122,6 +125,7 @@ class TicTacLogic {
        if (justStarted) {
            button = getRandomButton();
            button.setText(ZERO);
+           zeroButton.add(button.getId());
            justStarted = false;
            lookUpForPlayersCombinations(ZERO);
        }else {
@@ -142,8 +146,9 @@ class TicTacLogic {
                     continue;
                 }else {
                     b.setText(ZERO);
+                    zeroButton.add(b.getId());
+                    break;
                 }
-                return;
             } else {
                 zeroWin = false;
             }
@@ -159,7 +164,9 @@ class TicTacLogic {
                         continue;
                     }else {
                         b.setText(ZERO);
+                        zeroButton.add(b.getId());
                         deadHeat = false;
+                        break;
                     }
                 }
             }
@@ -167,6 +174,7 @@ class TicTacLogic {
                 for (Button remainButton : CELLS.values()) {
                     if (remainButton.getText().equals("")){
                         remainButton.setText(ZERO);
+                        zeroButton.add(remainButton.getId());
                         return;
                     }
                 }
@@ -250,4 +258,55 @@ class TicTacLogic {
     public String toString() {
         return "Player's combination -> " + x + "\nAI's combinations -> " + zero;
     }
+
+    public ArrayList<String> getZero() {
+        return new ArrayList<>(zero);
+    }
+
+    public void setZero(Set<String> zero) {
+        this.zero = zero;
+    }
+
+    public ArrayList<String> getX() {
+        return new ArrayList<>(x);
+    }
+
+    public void setX(Set<String> x) {
+        this.x = x;
+    }
+
+    public List<Integer> getXButton() {
+        return xButton;
+    }
+
+    public void setXButton(List<Integer> xButton) {
+        this.xButton = xButton;
+    }
+
+    public List<Integer> getZeroButton() {
+        return zeroButton;
+    }
+
+    public void setZeroButton(List<Integer> zeroButton) {
+        this.zeroButton = zeroButton;
+    }
+
+    public boolean isJustStarted() {
+        return justStarted;
+    }
+
+    public void setJustStarted(boolean justStarted) {
+        this.justStarted = justStarted;
+    }
+
+    public void reloadView() {
+        for (Button b: CELLS.values()){
+            if (zeroButton.contains(b.getId())){
+                b.setText(ZERO);
+            }else if (xButton.contains(b.getId())){
+                b.setText(X);
+            }
+        }
+    }
+
 }
