@@ -41,8 +41,10 @@ class TicTacLogic {
         directions.put("58", 2);
         //4
         directions.put("06", 3);
+        directions.put("07", 3);
         directions.put("45", 3);
         //6
+        directions.put("27", 5);
         directions.put("28", 5);
         directions.put("34", 5);
         //7
@@ -51,6 +53,7 @@ class TicTacLogic {
         directions.put("78", 6);
         //8
         directions.put("14", 7);
+        directions.put("56", 7);
         directions.put("68", 7);
         //9
         directions.put("04", 8);
