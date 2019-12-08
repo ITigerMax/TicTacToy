@@ -48,9 +48,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void doGame(View view) {
         LOGIC.userGo(view);
-        LOGIC.aiGo();
-        System.out.println(LOGIC);
-
+        if (LOGIC.isValidPlayerStep()){
+            LOGIC.aiGo();
+        }
     }
 
     private void loadGame(Bundle state) {

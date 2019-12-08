@@ -99,6 +99,7 @@ class TicTacLogic {
 
     private int currentButtonCell;
     private boolean justStarted;
+    private boolean validPlayerStep = false;
 
      TicTacLogic(Map<Integer, Button> cells) {
        this.CELLS = cells;
@@ -108,15 +109,17 @@ class TicTacLogic {
 
      void userGo(View view) {
         Button button = (Button) view;
-        xButton.add(button.getId());
         if (justStarted){
             lookUpForFirstPlayerStep(button);
         }
         if (button.getText().equals("")){
             button.setText(X);
+            xButton.add(button.getId());
+            lookUpForPlayersCombinations(X);
+            validPlayerStep = true;
         }
 
-        lookUpForPlayersCombinations(X);
+
 
     }
 
@@ -132,7 +135,7 @@ class TicTacLogic {
            doLogic();
            lookUpForPlayersCombinations(ZERO);
        }
-
+       validPlayerStep = false;
     }
 
     private void doLogic() {
@@ -164,6 +167,7 @@ class TicTacLogic {
                         continue;
                     }else {
                         b.setText(ZERO);
+                        System.out.println(b.isClickable());
                         zeroButton.add(b.getId());
                         deadHeat = false;
                         break;
@@ -309,4 +313,7 @@ class TicTacLogic {
         }
     }
 
+    public boolean isValidPlayerStep() {
+        return validPlayerStep;
+    }
 }
