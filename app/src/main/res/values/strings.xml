@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Крестики - Нолики</string>
-    <string name="field_name">Ты готов побеждать?</string>
+    <string name="gameStatus">Ты готов побеждать?</string>
     <string name="marked">Field has already marked</string>
+    <string name="not_bad_result">Совсем не дурно!!!</string>
+    <string name="bad_result">Ты проиграл! Соберись!</string>
 </resources>

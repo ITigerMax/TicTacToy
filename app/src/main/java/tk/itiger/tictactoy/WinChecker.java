@@ -98,7 +98,7 @@ public class WinChecker {
 
     private boolean checkCell(int id){
         for (Button button: buttons){
-            if (button.getText().equals(TicTacLogic.ZERO) && button.getId() == id) {
+            if (button.getText().equals(TicTacAILogic.ZERO) && button.getId() == id) {
                 return true;
             }
         }

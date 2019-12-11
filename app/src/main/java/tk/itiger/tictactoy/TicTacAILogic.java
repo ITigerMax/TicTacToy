@@ -18,7 +18,7 @@ import java.util.Set;
 
 
 
-class TicTacLogic {
+class TicTacAILogic {
 
 
     public static final String X = "X";
@@ -40,10 +40,11 @@ class TicTacLogic {
         //3
         directions.put("01", 2);
         directions.put("46", 2);
+        directions.put("56", 2);
         directions.put("58", 2);
         //4
         directions.put("06", 3);
-        directions.put("07", 3);
+//        directions.put("07", 3);
         directions.put("45", 3);
         //6
         directions.put("27", 5);
@@ -55,7 +56,6 @@ class TicTacLogic {
         directions.put("78", 6);
         //8
         directions.put("14", 7);
-        directions.put("56", 7);
         directions.put("68", 7);
         //9
         directions.put("04", 8);
@@ -101,7 +101,7 @@ class TicTacLogic {
     private boolean justStarted;
     private boolean validPlayerStep = false;
 
-     TicTacLogic(Map<Integer, Button> cells) {
+     TicTacAILogic(Map<Integer, Button> cells) {
        this.CELLS = cells;
        justStarted = true;
     }
@@ -159,10 +159,25 @@ class TicTacLogic {
 
         if (!zeroWin) {
             boolean deadHeat = true;
+            boolean aggressiveAttack = true;
+            Button b;
             for (String s: x) {
                 if (directions.containsKey(s) || directions.containsKey(checkAndReverseString(s))){
                     a = directions.get(checkAndReverseString(s));
-                    Button b = CELLS.get(a);
+                    if (aggressiveAttack){
+                        if (!justStarted && checkAndReverseString(s).equals("48") && CELLS.get(0).getText().equals(ZERO)) {
+                            b = CELLS.get(2);
+                            aggressiveAttack = false;
+                        }else if(!justStarted && checkAndReverseString(s).equals("04") && CELLS.get(8).getText().equals(ZERO)){
+                            b = CELLS.get(6);
+                            aggressiveAttack = false;
+                        } else {
+                            b = CELLS.get(a);
+                            aggressiveAttack = false;
+                        }
+                    }else {
+                        b = CELLS.get(a);
+                    }
                     if (!b.getText().equals("")){
                         continue;
                     }else {

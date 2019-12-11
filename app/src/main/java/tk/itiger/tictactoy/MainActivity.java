@@ -2,6 +2,7 @@ package tk.itiger.tictactoy;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
@@ -11,15 +12,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import java.util.HashSet;
+
+
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    private final String X_CELLS_MARKED = "x-cells";
-    private final String ZERO_CELLS_MARKED = "zero-cells";
-    private final String X_COMBINATION= "X_COMBINATION";
-    private final String ZERO_COMBINATION = "ZERO_COMBINATION";
-    private final String IS_JUST_STARTED = "IS_JUST_STARTED";
+
 
     private static int counter;
 
@@ -30,11 +28,9 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private Map<Integer, Button> BUTTONS = new HashMap<>();
-    private TicTacLogic LOGIC;
+    private TicTacAILogic LOGIC;
     private WinChecker winChecker;
     private TextView gameStatus;
-    private String finishingMessage;
-    private boolean isFinished;
 
     MediaPlayer player;
 
@@ -44,84 +40,45 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        initButtonList();
-        loadGame(savedInstanceState);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle state){
-        super.onSaveInstanceState(state);
-        state.putStringArrayList(X_COMBINATION, LOGIC.getX());
-        state.putStringArrayList(ZERO_COMBINATION, LOGIC.getZero());
-        state.putIntegerArrayList(X_CELLS_MARKED, (ArrayList<Integer>) LOGIC.getXButton());
-        state.putIntegerArrayList(ZERO_CELLS_MARKED, (ArrayList<Integer>) LOGIC.getZeroButton());
-        state.putBoolean(IS_JUST_STARTED, LOGIC.isJustStarted());
-        state.putInt("counter", counter);
-        state.putString("msg", finishingMessage);
-        state.putBoolean("isFinished", isFinished);
-    }
-
-    public void doGame(View view) {
-
-        LOGIC.userGo(view);
-        if (LOGIC.isValidPlayerStep()){
-            LOGIC.aiGo();
-            if (winChecker.checkWinner()) {
-               finish("YOU ARE LOSER!");
-            }
-        }
-        if (counter++ >= 4) {
-            finish("NOT BAD, NOT BAD");
-        }
-    }
-
-    private void loadGame(Bundle state) {
-        if (state == null) {
-            initGame();
-        } else {
-            initGame();
-            ArrayList<String> xc = state.getStringArrayList(X_COMBINATION);
-            ArrayList<String> zc = state.getStringArrayList(ZERO_COMBINATION);
-            LOGIC.setX(new HashSet<>(xc));
-            LOGIC.setZero(new HashSet<>(zc));
-            ArrayList<Integer> xm = state.getIntegerArrayList(X_CELLS_MARKED);
-            ArrayList<Integer> zm = state.getIntegerArrayList(ZERO_CELLS_MARKED);
-            LOGIC.setXButton(xm);
-            LOGIC.setZeroButton(zm);
-            LOGIC.setJustStarted(state.getBoolean(IS_JUST_STARTED));
-            LOGIC.reloadView();
-            counter = state.getInt("counter");
-            finishingMessage = state.getString("msg");
-            isFinished = state.getBoolean("isFinished");
-            if (isFinished){
-                finish(finishingMessage);
-            }
-
-        }
-    }
-
-    private void initGame() {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         player = MediaPlayer.create(this, R.raw.ost);
         player.setLooping(true);
         player.start();
-        isFinished = false;
+        initButtonList();
+        initGame();
+    }
+
+
+    public void doGame(View view) {
+        LOGIC.userGo(view);
+        if (LOGIC.isValidPlayerStep()){
+            if (counter++ >= 4) {
+                stopGame(getString(R.string.not_bad_result));
+            }
+            LOGIC.aiGo();
+            if (winChecker.checkWinner()) {
+               stopGame(getString(R.string.bad_result));
+            }
+        }
+
+    }
+
+
+    private void initGame() {
         gameStatus = findViewById(R.id.game_status);
-        LOGIC = new TicTacLogic(BUTTONS);
+        LOGIC = new TicTacAILogic(BUTTONS);
+        winChecker = new WinChecker(BUTTONS_ID, new ArrayList<>(BUTTONS.values()));
     }
 
     private void initButtonList() {
         for (int index = 0; index < BUTTONS_ID.length; index++) {
             BUTTONS.put(index, (Button) findViewById(BUTTONS_ID[index]));
         }
-        winChecker = new WinChecker(BUTTONS_ID, new ArrayList<>(BUTTONS.values()));
+
     }
 
-    private void finish(String msg) {
+    private void stopGame(String msg) {
         counter = 0;
-        isFinished = true;
-        finishingMessage = msg;
         gameStatus.setText(msg);
         for (Button b : BUTTONS.values()) {
             b.setEnabled(false);
@@ -131,10 +88,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 initButtonList();
                 initGame();
-                recreate();
+               for (Button b : BUTTONS.values()){
+                   b.setText("");
+                   b.setEnabled(true);
+                   gameStatus.setText(R.string.gameStatus);
+               }
+                gameStatus.setOnClickListener(null);
             }
         });
+
     }
+
+
 
     @Override
     protected void onPostResume() {
@@ -151,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        player.pause();
+        player.stop();
     }
+
 }
